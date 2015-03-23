@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front End Test App</title>
+
+    <link rel="stylesheet" type="text/css" media="all" href="Content/site.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="Content/icons.css" />
+    
+
+    <script type="text/javascript" src="Scripts/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="Scripts/knockout-3.2.0.js"></script>
+    <script type="text/javascript" src="Scripts/numeric.js"></script>
+    <script type="text/javascript" src="Scripts/MultiplicationMatricesViewModel.js"></script>
+
+</head>
+<body>
+
+
+    <div id="content-mult-matrices">
+
+        <div class="bg-gray left-block" data-bind="css: { 'bg-blue': isFocusInCell, 'bg-pink': hasError() }">
+
+			<div class="button-group">
+				<div class="multiply-matrices-button" data-bind="click: multiplyMatrices">
+					<div class="multiply-matrices-button-content">
+						<span class="multiply-matrices-button-content__text">Умножить матрицы</span>
+					</div>
+				</div>
+			</div>
+					
+                    <div style="height: 50px;"></div>
+
+                    <div class="button-group">
+                        <button class="btn-prototype" data-bind="click: setEmpty">
+						<i class="icon ci-clear"></i>
+                            Очистить марицы
+                        </button>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-prototype" data-bind="click: change">
+                            <i class="icon ci-tudasuda"></i>
+                            Поменять матрицы местами
+                        </button>
+                    </div>
+
+                    <div style="height: 50px;"></div>
+
+                    <div class="button-group">
+                        <div class="row">
+                                <!--ko foreach: matricesToAction-->
+                                <label class="radio-inline">
+                                    <input type="radio" name="radio" class="radiobox" data-bind="checkedValue: $data, checked: $root.selectedMatrix">
+                                    <span data-icon="a" data-bind="text: key"></span>
+                                </label>
+                                <!--/ko-->
+                            </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-prototype" data-bind="click: addRow">
+                            <i class="icon ci-plus"></i>
+                            Добавить
+                        </button>
+                        <button class="btn-prototype  col-md-push-1" data-bind="click: removeRow">
+                            <i class="icon ci-minus"></i>
+                            Удалить
+                        </button>
+                        <span class="col-md-push-1 form-control-static">строку</span>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-prototype" data-bind="click: addCollumn">
+                            <i class="icon ci-plus"></i>
+                            Добавить
+                        </button>
+                        <button class="btn-prototype " data-bind="click: removeCollumn">
+                            <i class="icon ci-minus"></i>
+                            Удалить
+                        </button>
+                        <span class="">стоблец</span>
+                    </div>
+
+
+                    <div class="error-block" data-bind="foreach: errors">
+                        <small class="help-block" data-bind="text: $data"></small>
+                    </div>
+                    
+
+         
+
+
+        </div>
+
+
+        <div class="main-block">
+                     <div class="main-block__matrixC margin-top">
+                    <div class="bracket">
+                        <div class="bracket-content">
+                            <!--ko foreach:matrixC-->
+                            <ul class="row-cells">
+                                <!--ko foreach:$data-->
+                                <li class="cell">
+                                    <input class="cell__input" disabled="disabled" data-bind="value:value, attr: { placeholder: placeholder}" type="text" />
+                                </li>
+                                <!--/ko-->
+                            </ul>
+                            <!--/ko-->
+                        </div>
+                    </div>
+                </div>
+				
+				<div style="margin-left:10px;">
+				</div>
+
+
+
+                <!--ko foreach: matricesToAction-->
+                <div class=" margin-top" data-bind="css:{'main-block__matrixA': $index()%2===0, 'main-block__matrixB': $index()%2!=0}">
+                    <div class="bracket">
+                        <div class="bracket-content">
+                            <div data-bind="template: { name: 'display-matrix', foreach: value }"></div>
+
+                            <div data-bind="text: displayedName, css:{'position-near': $index()%2===0, 'position-under': $index()%2!=0}"></div>
+                        </div>
+                    </div>
+                </div>
+				<div class="clear"></div>
+                <!--/ko-->
+
+        </div>
+
+
+    </div>
+
+
+    <script type="text/html" id="display-matrix">
+        <ul class="row-cells">
+            <!--ko foreach:$data-->
+            <li class="cell">
+                <input class="cell__input" data-bind="numeric:value, maxValue:10, event: { focus: $root.doOnFocus, blur:$root.doOnBlur }, value:value, attr: { placeholder: placeholder}, valueUpdate:'afterkeydown'" type="text" />
+            </li>
+            <!--/ko-->
+        </ul>
+    </script>
+
+
+
+    <script type="text/javascript">
+
+        var model = new MultiplicationMatricesViewModel();
+        ko.applyBindings(model);
+
+    </script>
+
+</body>
+</html>
